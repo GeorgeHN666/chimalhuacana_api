@@ -162,29 +162,29 @@ func (app *application) GetOrderStr(o Order) (string, error) {
 	for _, v := range o.List {
 
 		if v.MenuType == "Tacos de muerte lenta" {
-			st := fmt.Sprintf("- %v <%v> %v %v (%v)", v.Quantity, v.Tortilla, v.Parent, v.Item, v.Details)
+			st := fmt.Sprintf("- %s <%s> %s %s (%s)", v.Quantity, v.Tortilla, v.Parent, v.Item, v.Details)
 
 			tempString = append(tempString, st)
 			st = ""
 		}
 		if v.MenuType == "El Patio" {
-			st := fmt.Sprintf("- %v <%v:%v> %v %v (%v)", v.Quantity, v.Action, v.Ingredients, v.Parent, v.Item, v.Details)
+			st := fmt.Sprintf("- %s <%s:%s> %s %s (%s)", v.Quantity, v.Action, v.Ingredients, v.Parent, v.Item, v.Details)
 			tempString = append(tempString, st)
 			st = ""
 		}
 		if v.MenuType == "Tacos de guisado" {
-			st := fmt.Sprintf("- %v <%v:%v> %v %v (%v)", v.Quantity, v.Action, v.Tipo, v.Parent, v.Item, v.Details)
+			st := fmt.Sprintf("- %s <%s:%s> %s %s (%s)", v.Quantity, v.Action, v.Tipo, v.Parent, v.Item, v.Details)
 			tempString = append(tempString, st)
 			st = ""
 		}
 		if v.MenuType == "Bebidas" {
-			st := fmt.Sprintf("- %v <%v:%v> %v %v (%v)", v.Quantity, v.Action, v.Tipo, v.Parent, v.Item, v.Details)
+			st := fmt.Sprintf("- %s <%s %s> %s %s (%s)", v.Quantity, v.Action, v.Tipo, v.Parent, v.Item, v.Details)
 			tempString = append(tempString, st)
 			st = ""
 
 		}
 		if v.MenuType == "Postres" {
-			st := fmt.Sprintf("-$%v <Tipo:%v Postre:%v %v toppings:%v %v > %v %v (%v)", v.Quantity, v.Tipo, v.Postre, v.Postres, v.Toppings, v.Topping, v.Parent, v.Item, v.Details)
+			st := fmt.Sprintf("-%s <Tipo:%s Postre:%s %s toppings:%s %s> %s %s (%s)", v.Quantity, v.Tipo, v.Postre, v.Postres, v.Toppings, v.Topping, v.Parent, v.Item, v.Details)
 			tempString = append(tempString, st)
 			st = ""
 		}
@@ -193,7 +193,11 @@ func (app *application) GetOrderStr(o Order) (string, error) {
 
 	OR := strings.Join(tempString, "%0a")
 
-	final := fmt.Sprintf("%v %0a Numero de orden: %v %0a <%v> %0a *%v %0a -%v %0a Total: %v %0a %0a ---ORDEN---%0a %v", o.Name, orderN, o.Deliver, o.Loc, o.Payment, o.Total, OR)
+	set := fmt.Sprintf("%s * Numero de orden: %s * <%s> * Ubicacion:%s * *Metodo de pago:%s * Total: $%d * * ---ORDEN---*", o.Name, orderN, o.Deliver, o.Loc, o.Payment, o.Total)
+
+	s := strings.Replace(set, "*", "%0a", 10)
+
+	final := fmt.Sprintf("%s %s", s, OR)
 
 	if len(final) < 1 {
 		return final, errors.New("bad string")
